@@ -1,0 +1,6 @@
+{
+  "name": "OceanGuard: Advanced Marine Plastic Tracker",
+  "description": "Satellite-based autonomous sub-pixel detection and trajectory mapping of floating marine macro and microplastics, integrating ocean currents and wind data for precise accumulation prediction.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["Real-time satellite imagery analysis", "Environmental factor integration", "Predictive accumulation modeling"]
+}

@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "Detection": {
+      "title": "Detection",
+      "description": "A single point detection of marine plastic via satellite spectral analysis.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          },
+          "required": ["lat", "lng"]
+        },
+        "plasticType": { "type": "string", "enum": ["macro", "micro"] },
+        "confidence": { "type": "number" },
+        "spectralSignature": { "type": "string" },
+        "biofoulingLevel": { "type": "number" },
+        "pixelCoverage": { "type": "number", "description": "Percentage of the 10m pixel covered by plastic." }
+      },
+      "required": ["timestamp", "location", "plasticType", "confidence"]
+    },
+    "Trajectory": {
+      "title": "Trajectory",
+      "description": "Path data for active debris clusters.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "detectionId": { "type": "string" },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lat": { "type": "number" },
+              "lng": { "type": "number" },
+              "timestamp": { "type": "string", "format": "date-time" },
+              "type": { "type": "string", "enum": ["historical", "predicted"] }
+            }
+          }
+        },
+        "currentSpeed": { "type": "number" },
+        "windEffect": { "type": "number" }
+      },
+      "required": ["detectionId", "path"]
+    },
+    "EnvironmentalEntry": {
+      "title": "Environmental Entry",
+      "description": "Recorded wind and ocean current data for trajectory calculations.",
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "string", "format": "date-time" },
+        "wind": {
+          "type": "object",
+          "properties": {
+            "speed": { "type": "number" },
+            "direction": { "type": "number" }
+          }
+        },
+        "current": {
+          "type": "object",
+          "properties": {
+            "speed": { "type": "number" },
+            "direction": { "type": "number" }
+          }
+        }
+      },
+      "required": ["timestamp", "wind", "current"]
+    }
+  },
+  "firestore": {
+    "/detections/{detectionId}": {
+      "schema": "Detection",
+      "description": "Store individual plastic detections detected by AI spectral analysis."
+    },
+    "/trajectories/{trajectoryId}": {
+      "schema": "Trajectory",
+      "description": "Track historical and predicted trajectories of plastic clusters."
+    },
+    "/environmental_logs/{logId}": {
+      "schema": "EnvironmentalEntry",
+      "description": "Log environmental factors used for drift modeling."
+    }
+  }
+}
